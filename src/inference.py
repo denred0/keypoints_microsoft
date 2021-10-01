@@ -30,7 +30,7 @@ model = get_pretrained_keypointrcnn(
     num_classes=2,  # __background__ and milk_bottle
     num_keypoints=len(person_keypoint_meta["labels"]),
 )
-checkpoint = torch.load('logs/checkpoint_exp_2_e13_precision_0.8085_recall_0.8557.pth')
+checkpoint = torch.load('logs/checkpoint_exp_4_e21_precision_0.83_recall_0.883.pth')
 model.load_state_dict(checkpoint['model'])
 model.eval()
 

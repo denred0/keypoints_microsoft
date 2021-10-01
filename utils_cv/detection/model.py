@@ -507,7 +507,7 @@ class DetectionLearner:
             step_size: int = None,
             gamma: float = 0.5,  # 0.1
             skip_evaluation: bool = False,
-            early_stopping_epochs=5
+            early_stopping_epochs=7
     ) -> None:
         """ The main training loop. """
 

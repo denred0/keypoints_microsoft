@@ -9,7 +9,7 @@ from pathlib import Path
 from my_utils import get_all_files_in_folder
 
 
-def prepare_train(resize_size=(512, 512)):
+def prepare_train(resize_size=(256, 256)):
     dirpath_images = Path('data/train/images')
     if dirpath_images.exists() and dirpath_images.is_dir():
         shutil.rmtree(dirpath_images)
@@ -26,16 +26,25 @@ def prepare_train(resize_size=(512, 512)):
     if len(images) != len(annotations):
         raise ValueError("Count of images is not equal count of labels")
 
+    max_h = 0
+    max_w = 0
+
     for im_path, annot_path in tqdm(zip(images, annotations), total=len(images), desc='Preparing train'):
         assert im_path.stem == annot_path.stem, 'Image and annot have different names'
 
         img = cv2.imread(str(im_path), cv2.IMREAD_COLOR)
         # img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 
+        h = img.shape[0]
+        w = img.shape[1]
+
+        max_w = max(w, max_w)
+        max_h = max(h, max_h)
+
         image_res = cv2.resize(img, resize_size, interpolation=cv2.INTER_NEAREST)
 
-        x_scale_factor = resize_size[0] / img.shape[1]
-        y_scale_factor = resize_size[1] / img.shape[0]
+        x_scale_factor = resize_size[0] / w
+        y_scale_factor = resize_size[1] / h
 
         with open(annot_path) as j:
             json_ = json.load(j)
@@ -95,8 +104,11 @@ def prepare_train(resize_size=(512, 512)):
         tree = ET.ElementTree(root)
         tree.write(Path.joinpath(dirpath_annot, annot_path.stem + '.xml'))
 
+    print('max_h', max_h)
+    print('max_w', max_w)
 
-def prepare_test(resize_size=(512, 512)):
+
+def prepare_test(resize_size=(256, 256)):
     dirpath_images = Path('data/test/images')
     if dirpath_images.exists() and dirpath_images.is_dir():
         shutil.rmtree(dirpath_images)
@@ -115,6 +127,6 @@ def prepare_test(resize_size=(512, 512)):
 
 
 if __name__ == '__main__':
-    resize_size = (512, 512)
+    resize_size = (256, 256)
     prepare_train(resize_size=resize_size)
     prepare_test(resize_size=resize_size)

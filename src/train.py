@@ -15,7 +15,7 @@ data = DetectionDataset(
     train_pct=0.8,
 )
 print(f"There are {len(data)} images, of which {len(data.train_ds)} are for training.")
-# data.show_ims(rows=3, seed=54)
+# data.show_ims(rows=3, cols=6, seed=54)
 
 device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
 print(f"Using torch device: {device}")
@@ -24,6 +24,9 @@ model = get_pretrained_keypointrcnn(
     num_classes=2,  # __background__ and milk_bottle
     num_keypoints=len(person_keypoint_meta["labels"]),
 )
+
+model.to(device).cuda()
+
 
 detector = DetectionLearner(dataset=data, model=model, device=device)
 detector.fit(epochs=EPOCHS, lr=LEARNING_RATE, print_freq=100, skip_evaluation=False)

@@ -28,5 +28,7 @@ model = get_pretrained_keypointrcnn(
 model.to(device).cuda()
 
 
+print(model)
+
 detector = DetectionLearner(dataset=data, model=model, device=device)
 detector.fit(epochs=EPOCHS, lr=LEARNING_RATE, print_freq=100, skip_evaluation=False)

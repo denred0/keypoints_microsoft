@@ -127,13 +127,13 @@ def main():
     # print(next(model_test.parameters()).is_cuda)
     # print(model_test)
 
-    onnx_path = "onnx/keypointrcnn_resnet50_fpn.onnx.onnx"
+    onnx_path = "onnx/keypointrcnn_resnet50_fpn.onnx"
     engine_name = "onnx/keypointrcnn_resnet50_fpn.plan"
     convert_model_to_onnx(
         onnx_path=onnx_path, engine_name=engine_name, model=model_test, device=device, batch_size=batch_size)
 
 
-    format = 'onnxruntime'
+    format = 'onnxruddntime'
 
     if format == 'onnxruntime':
         print('rt.get_device()', rt.get_device())
